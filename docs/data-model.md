@@ -10,7 +10,7 @@ The public system revolves around two main tables and one retrieval function.
 
 ## `course_reviews`
 
-Main course entity used by the public website, admin dashboard, and AI retrieval.
+Main course entity used by the public website, timetable, admin dashboard, and AI retrieval.
 
 Representative fields:
 
@@ -53,21 +53,29 @@ This table powers:
 
 - public course search
 - structured course cards
+- timetable rendering inputs
 - AI retrieval source records
 - admin-side course editing
 - aggregate course stats after moderation
 
-### Why `pros`, `cons`, and `advice` Matter
+### Why The Summary Fields Matter
 
-These fields are not just for display.
+Fields like `pros`, `cons`, `advice`, `assignment`, and `grading` are central to the product.
 
-When multiple reviews of the same course are grouped together and summarized, fields like `pros`, `cons`, and `advice` become useful in three places:
+They are produced after multiple reviews for the same course are grouped and AI-summarized into a fixed course-level format.
+
+That makes them useful in several places at once:
 
 - frontend readability
+- filterable course summaries
 - search quality
 - RAG context quality
 
-That is why `advice` is part of the searchable fields and why summary-like fields remain important in the runtime data model.
+### Why `embedding` Matters
+
+The `embedding` field is what connects processed course records to retrieval.
+
+Instead of only searching with plain text matching, the system stores vector representations for course-level records and uses them during AI-assisted course search.
 
 ## `course_feedback_submissions`
 

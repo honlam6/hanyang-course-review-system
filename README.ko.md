@@ -2,7 +2,7 @@
 
 [中文](./README.md) | [English](./README.en.md)
 
-한양대학교 학생을 위한 수강후기 및 AI 기반 수강 보조 웹사이트입니다.
+한양대학교 학생을 위한 수강후기, 시간표, AI 기반 수강 보조 웹사이트입니다.
 
 - 라이브 데모: <https://hanyang.eu.cc>
 - GitHub 메타데이터: [docs/github-metadata.md](./docs/github-metadata.md)
@@ -28,28 +28,35 @@
 
 - 강의 목록 탐색, 검색, 필터링
 - 강의 상세 페이지
+- 시간표 기능
+- 시간 충돌 감지
 - 후기 / 보완 / 정정 제출
 - 관리자 검수 흐름
 - AI 수강 도우미
 - Supabase `pgvector` 기반 RAG 검색
 
-## 데이터 준비 방식
+## 핵심은 Everytime 데이터를 그대로 가져오는 것이 아님
+
+더 중요한 부분은 데이터 처리 방식입니다.
 
 제가 사용한 방식은 대략 이렇습니다.
 
 1. 크롤링 스크립트나 브라우저 개발자 도구를 사용해서 Everytime 관련 페이지에서 강의 정보와 사용자 후기 데이터를 정리한다
 2. 같은 강의에 대한 여러 후기들을 한데 모은다
-3. 그것들을 AI로 분석해서 다음처럼 보기 좋고 검색에 쓰기 좋은 필드로 정리한다
-   - 장점
-   - 단점
-   - 조언
-   - 과제량
-   - 팀플 부담
-   - 학점 스타일
-   - 출석 방식
-   - 시험 횟수
-4. 그 결과를 웹사이트 데이터 테이블에 저장한다
-5. 처리된 강의 레코드를 검색, 프런트 표시, AI 도우미에 활용한다
+3. 그 원본 후기들을 AI로 정리해서 다음과 같은 고정 필드로 만든다
+   - `pros`
+   - `cons`
+   - `advice`
+   - `assignment`
+   - `team_project`
+   - `grading`
+   - `attendance`
+   - `exam_count`
+4. 처리된 강의 레코드에 embedding 을 생성한다
+5. 그 결과를 웹사이트 테이블과 벡터 검색 흐름에 저장한다
+6. 처리된 데이터를 화면 표시, 검색, AI 도우미에 활용한다
+
+즉 이 사이트는 Everytime 내용을 그대로 옮겨 놓은 형태가 아니라, 흩어진 후기 신호를 강의 단위의 일관된 구조로 정리한 뒤 검색과 AI 응답에 연결한 구조입니다.
 
 데이터 준비 방식은 꼭 이 방법일 필요는 없고, 다른 방식으로 해도 괜찮습니다.
 
@@ -58,17 +65,37 @@
 - [docs/data-source.md](./docs/data-source.md)
 - [docs/architecture.md](./docs/architecture.md)
 
-## AI 도우미와 RAG
+## AI 도우미, Embedding, Google API
 
-이 도우미는 단순 채팅창이 아닙니다.
+이 부분이 프로젝트에서 중요한 축입니다.
 
 대략적인 흐름은 다음과 같습니다.
 
-1. 사용자가 질문한다
-2. 질문을 embedding 으로 바꾼다
-3. `match_courses` 로 관련 강의를 찾는다
+1. 사용자가 수강 관련 질문을 한다
+2. Google Gemini API 로 질의 embedding 을 만든다
+3. `match_courses` 로 벡터 검색을 수행한다
 4. 캠퍼스, 학기, 분류 조건을 적용한다
-5. 찾은 강의들을 모델에 넘겨 최종 답변을 만든다
+5. 매칭된 강의 요약을 바탕으로 Gemini 가 최종 답변을 만든다
+
+즉 단순 채팅 UI 가 아니라 다음이 함께 묶여 있습니다.
+
+- Google Gemini API
+- AI 기반 강의 요약 필드
+- embedding 검색
+- Supabase `pgvector`
+- RAG 답변 생성
+
+## 시간표와 충돌 감지
+
+웹사이트에는 시간표 기능도 들어 있습니다.
+
+사용자가 강의를 시간표에 추가하면, 시스템이 파싱된 수업 시간을 기준으로 자동으로 충돌을 감지합니다. 시간표 화면은 이미지로 내보내는 것도 가능합니다.
+
+관련 구현:
+
+- [`src/components/Timetable.tsx`](./src/components/Timetable.tsx)
+- [`src/components/UserView.tsx`](./src/components/UserView.tsx)
+- [`src/lib/courseTime.ts`](./src/lib/courseTime.ts)
 
 ## 데이터 구조
 
@@ -110,6 +137,7 @@ npm run dev
 - 분류 체계
 - 데이터 수집 방식
 - 정리 규칙
+- AI 요약 규칙
 - embedding 생성 방식
 
 그래서 정확한 표현은 다음과 같습니다.

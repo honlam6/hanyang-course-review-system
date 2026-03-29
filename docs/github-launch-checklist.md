@@ -39,10 +39,11 @@ Confirm none of the following are present:
 
 Confirm the wording stays consistent:
 
-- This is a Hanyang University course review system
-- The current data flow uses Everytime-related pages
-- Data is grouped and summarized before being written into the site tables
-- The processed records are used in display, search, and the AI assistant
+- This is a Hanyang University course review, timetable, and AI-assisted course selection system
+- The source signals come from Everytime-related pages
+- The important step is AI summarization into fixed course fields, not raw text display
+- The processed course records are embedded and used in search and the AI assistant
+- The site includes timetable management and class-time conflict detection
 
 ## Final Check
 

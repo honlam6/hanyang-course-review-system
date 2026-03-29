@@ -1,50 +1,63 @@
-# Data Source And Everytime Note
+# Data Source And Processing Note
 
 ## Main Idea
 
-The website data did not come from one manually written spreadsheet.
+The important part is not simply collecting data from Everytime.
 
-My own approach was:
+The more important part is turning scattered review signals into a stable course-level format that the website and AI layer can actually use.
+
+A practical version of the flow looks like this:
 
 1. use crawler scripts or browser developer tools to collect course-related information and user review data from relevant Everytime pages
-2. group multiple user reviews for the same course
+2. group multiple user reviews that belong to the same course
 3. normalize the raw records into a stable course schema
-4. use AI to summarize the grouped reviews into fields that are easier to display and retrieve
-5. write the processed records into the website database
-6. use those processed records for frontend display, search, and the AI assistant
+4. use AI to summarize the grouped reviews into fixed fields such as:
+   - `pros`
+   - `cons`
+   - `advice`
+   - `assignment`
+   - `team_project`
+   - `grading`
+   - `attendance`
+   - `exam_count`
+5. generate embeddings from the processed course records
+6. write those records into the website database and retrieval flow
+7. use them for frontend display, search, and the AI assistant
 
-## Why AI Summarization Was Used
+If you build on top of this project, you can follow the same general approach or swap in your own collection method.
 
-Raw user reviews are noisy and uneven.
+## Why AI Summarization Matters
 
-After collecting multiple reviews for the same course, AI summarization was used to generate clearer course-level fields such as:
+Raw review text is noisy.
 
-- pros
-- cons
-- advice
-- assignment load
-- team project burden
-- grading style
-- attendance style
-- exam count
+Different students describe the same course in different ways, with different detail levels and different vocabulary.
 
-This made the data more usable in three places at once:
+AI summarization makes the data usable at the course level:
 
-- course cards on the frontend
-- keyword and field-based search
-- the later RAG pipeline for the AI assistant
+- one course can be represented by a stable summary instead of a pile of raw comments
+- the frontend can show fixed fields consistently
+- search becomes easier because the records are normalized
+- RAG retrieval gets cleaner context than raw review fragments alone
 
-## Important Practical Point
+In other words, the site is not based on a direct dump of Everytime text. It is based on AI-processed course records.
 
-The website is not just showing raw scraped text from Everytime.
+## Google API And Embeddings
 
-The data first goes through:
+The project also depends on embeddings, not only text summaries.
 
-- collection
-- grouping
-- normalization
-- AI summarization
-- storage into the course schema
+The processed course records are embedded and stored for vector retrieval, and user questions are embedded at runtime through Google Gemini API.
 
-If you want to build on top of this project, you can follow the same general idea.
-You can also use a different data collection method if that works better for you.
+That makes it possible to:
+
+- retrieve semantically related courses
+- combine retrieval with campus and category filters
+- pass cleaner context into the final AI answer stage
+
+So the key stack here is:
+
+- Everytime-related source pages
+- AI summarization into fixed course fields
+- Google Gemini API
+- embeddings
+- Supabase `pgvector`
+- RAG answer generation
