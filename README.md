@@ -1,14 +1,14 @@
-# 韩国汉阳大学选课评价系统 Web OSS
+# 韩国汉阳大学选课评价系统
 
 [English](./README.en.md) | [한국어](./README.ko.md)
 
-一个面向韩国汉阳大学的课程评价与 AI 选课辅助系统公开版，保留 Web 前后台与 RAG 运行时链路，不公开私有生产数据维护脚本。
+这是一个给汉阳大学学生用的选课评价和 AI 选课辅助网站。
 
 - 在线示范：<https://hanyang.eu.cc>
 - GitHub 展示建议：[docs/github-metadata.md](./docs/github-metadata.md)
 - 系统架构与网站逻辑：[docs/architecture.md](./docs/architecture.md)
 - 数据结构：[docs/data-model.md](./docs/data-model.md)
-- 数据来源与 Everytime 说明：[docs/data-source.md](./docs/data-source.md)
+- 数据来源说明：[docs/data-source.md](./docs/data-source.md)
 - 贡献指南：[CONTRIBUTING.md](./CONTRIBUTING.md)
 - 安全说明：[SECURITY.md](./SECURITY.md)
 
@@ -22,60 +22,65 @@
 
 ![Mobile Demo](./docs/images/homepage-mobile.png)
 
-## 这是什么
+## 这个项目做什么
 
-这是一个以汉阳大学为默认业务语境的 Web 版开源骨架，包含：
+项目现在主要包含这些部分：
 
 - 课程列表浏览、搜索、筛选
 - 课程详情展示
-- 课程评价 / 补充信息 / 更正信息提交
-- 管理后台登录与审核流程
+- 用户提交评价、补充信息、更正信息
+- 管理后台审核
 - AI 选课助手
-- 基于 Supabase `pgvector` 的 RAG 检索问答
+- 基于 Supabase `pgvector` 的 RAG 检索
 
-## 公开版保留了什么
+## 数据是怎么来的
 
-- Web 前台
-- Web 后台
-- 基础 API
-- 运行时 AI / RAG 链路
-- Supabase 表结构与检索函数定义
+我自己的做法是：
 
-## 公开版没有什么
+1. 使用爬虫脚本或者开发者工具，从 Everytime 相关页面整理课程信息和用户评价
+2. 把同一门课的多条用户评价汇总起来
+3. 用 AI 分析总结出更适合展示和检索的字段，比如：
+   - 优点
+   - 缺点
+   - 建议
+   - 作业量
+   - 小组项目
+   - 给分情况
+   - 出勤方式
+   - 考试次数
+4. 把这些结果写进网站的数据表里
+5. 再把处理后的课程记录用于搜索、前台展示和 AI 助手
 
-- 微信小程序代码
-- Everytime 抓取脚本实现
-- 数据清洗、同步、embedding 批处理脚本实现
-- 生产数据源与内部运营流程
+如果你有别的采集方式，也完全可以按你自己的方式来做，不一定非得照这个流程。
 
-也就是说，这个仓库公开的是产品壳、运行时逻辑和数据约定，不是完整的私有生产流水线。
+更细的说明在这里：
 
-## 数据来源说明
+- [docs/data-source.md](./docs/data-source.md)
+- [docs/architecture.md](./docs/architecture.md)
 
-生产环境里的课程数据与历史评价信号，原本来自韩国学生社区软件 Everytime 的相关页面抓取与整理。这个公开版会明确说明数据来源是 Everytime，但不会公开实际抓取脚本、账号处理、规则细节和生产同步流程。
+## AI 助手和 RAG
 
-详见：[docs/data-source.md](./docs/data-source.md)
+这个项目不是单纯接一个聊天框。
 
-## AI + RAG
+大致流程是：
 
-这个项目不是普通聊天框，而是检索增强生成流程：
-
-1. 把用户问题转成 embedding
-2. 用 Supabase `match_courses` 检索相关课程
-3. 按校区、学期、分类做过滤
-4. 把检索结果交给 Gemini 生成最终推荐
-
-详见：[docs/architecture.md](./docs/architecture.md)
+1. 用户提问
+2. 把问题转成 embedding
+3. 用 `match_courses` 检索相关课程
+4. 结合校区、学期、分类做过滤
+5. 把命中的课程交给模型生成最终回答
 
 ## 数据结构
 
-核心围绕两张表和一个检索函数：
+核心围绕三部分：
 
 - `course_reviews`
 - `course_feedback_submissions`
 - `match_courses`
 
-详见：[docs/data-model.md](./docs/data-model.md)
+详细字段说明见：
+
+- [docs/data-model.md](./docs/data-model.md)
 
 ## 本地运行
 
@@ -94,11 +99,20 @@ npm run dev
 
 - 在 Supabase SQL Editor 执行 [`supabase_setup.sql`](./supabase_setup.sql)
 
-## 它能否泛化到韩国其他高校
+## 迁移到其他韩国高校
 
-可以，但准确说法应该是：
+这个项目现在是按汉阳大学来做的，但结构上不只适用于汉阳大学。
 
-- 当前项目：汉阳大学课程评价系统
-- 架构层面：可迁移为韩国高校通用课程评价系统
+如果你想迁移到别的韩国高校，通常要调整这些内容：
 
-原因是当前数据模型和检索逻辑围绕校区、学期、课程元数据、分类树、用户评价聚合和向量检索展开，这些能力具有跨学校复用性；但默认命名、文案、校区枚举和业务语境仍然是汉阳大学版本。
+- 学校名称和页面文案
+- 校区枚举
+- 分类体系
+- 数据采集方式
+- 数据清洗规则
+- embedding 生成方式
+
+所以更准确的说法是：
+
+- 当前项目：汉阳大学选课评价系统
+- 架构层面：可以迁移成韩国高校通用的课程评价系统

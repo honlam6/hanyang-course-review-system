@@ -15,7 +15,7 @@ Explain why this change is needed.
 
 - [ ] I tested the relevant behavior locally
 - [ ] I updated documentation if behavior changed
-- [ ] I did not include secrets, private data, or private Everytime materials
+- [ ] I did not include secrets or sensitive data
 
 ## Screenshots Or API Notes
 

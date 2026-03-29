@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a reproducible bug in the public web OSS shell
+about: Report a reproducible bug in the web project
 title: "[Bug] "
 labels: bug
 assignees: ''
@@ -37,9 +37,9 @@ Please confirm whether this issue affects:
 - [ ] Public frontend
 - [ ] Admin dashboard
 - [ ] Public API
-- [ ] AI / RAG runtime behavior
+- [ ] AI assistant or search behavior
 - [ ] Documentation
 
 ## Notes
 
-Do not include secrets, private datasets, or private Everytime credentials/session data.
+Do not include secrets, tokens, or sensitive user data.

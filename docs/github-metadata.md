@@ -2,7 +2,7 @@
 
 ## Recommended Repository Names
 
-- `hanyang-course-guide-web-oss`
+- `hanyang-course-guide`
 - `hanyang-course-review-system`
 - `hanyang-course-guide-rag`
 
@@ -14,7 +14,7 @@ A Hanyang University course review and AI-assisted course selection system built
 
 ### 中文
 
-一个面向韩国汉阳大学的课程评价与 AI 选课辅助系统，包含 Web 前后台、Supabase、Gemini 和 RAG 检索链路。
+一个面向韩国汉阳大学的课程评价与 AI 辅助选课系统，使用 React、Express、Supabase、Gemini 和 RAG。
 
 ### 한국어
 
@@ -47,14 +47,14 @@ Use one of these screenshots as the repository social preview image:
 - [`docs/images/homepage-desktop.png`](./images/homepage-desktop.png)
 - [`docs/images/homepage-mobile.png`](./images/homepage-mobile.png)
 
-## Accurate Public Positioning
+## Public Positioning
 
-Use this wording consistently:
+Use wording close to this:
 
-> A public web-only OSS shell of a Hanyang University course review and AI-assisted course selection system, preserving the runtime Web and RAG layers while omitting the private production data pipeline.
+> A Hanyang University course review system that combines course data, review summaries, search, and a RAG-based AI assistant.
 
 ## Data Origin Wording
 
-If you need one short sentence about the original production data source, use:
+If you need one short sentence about the data flow, use:
 
-> Production course and review signals were originally collected and organized from relevant pages in the Korean student community software Everytime, while the private crawling and maintenance pipeline remains outside this OSS repository.
+> Course information and user reviews were collected from relevant Everytime pages with crawler scripts or browser developer tools, then grouped and summarized into structured course fields for display, search, and the AI assistant.

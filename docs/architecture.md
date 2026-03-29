@@ -2,22 +2,15 @@
 
 ## Product Scope
 
-This repository is the public web-only OSS shell of a Hanyang University course review and AI-assisted course selection system.
+This repository is the web version of a Hanyang University course review and AI-assisted course selection system.
 
-It preserves:
+The core pieces are:
 
 - Web frontend
 - Admin dashboard
 - Core APIs
 - Runtime AI / RAG logic
 - Supabase schema and vector retrieval function
-
-It omits:
-
-- Private data ingestion scripts
-- Production crawling implementation
-- Internal synchronization workflows
-- Bulk embedding generation scripts
 
 ## Core Site Logic
 
@@ -99,29 +92,26 @@ Relevant files:
 - [`src/lib/aiCourseRecommendations.ts`](../src/lib/aiCourseRecommendations.ts)
 - [`supabase_setup.sql`](../supabase_setup.sql)
 
-## Private Production Data Processing Logic
+## Data Processing Logic
 
-The original production workflow can be described at a high level without exposing the private implementation.
+A practical version of the data flow looks like this:
 
-1. Course-related information and historical review signals were collected from relevant pages in the Korean student community software Everytime.
-2. Raw records were normalized into a structured course schema.
-3. Multiple user review texts for the same course were analyzed and summarized with AI into concise fields such as:
+1. collect course-related information and user review data from Everytime using crawler scripts or browser developer tools
+2. group multiple reviews that belong to the same course
+3. normalize those records into a stable schema
+4. use AI to summarize the grouped reviews into course-level fields such as:
    - pros
    - cons
    - advice
    - assignment load
    - team project burden
-   - grading strictness
+   - grading style
    - attendance style
    - exam count
-4. Those summarized fields were written into `course_reviews` for direct frontend display.
-5. The summarized text fields also improved downstream retrieval quality:
-   - they became part of public search behavior
-   - they enriched the context used by the AI assistant
-   - they strengthened later RAG retrieval and answer generation
-6. Embeddings were generated from the prepared course records and written into `course_reviews.embedding`.
+5. store those summarized fields in `course_reviews`
+6. use the resulting records for frontend display, search, and RAG retrieval
 
-The OSS repository preserves the runtime side of this architecture, but not the private production scripts that implemented the data pipeline.
+This matters because the site is not driven only by raw review text. It uses processed course-level summaries that are easier to read and easier to retrieve.
 
 ## Why This Can Generalize Beyond Hanyang
 

@@ -1,87 +1,50 @@
 # Data Source And Everytime Note
 
-## Important Boundary
+## Main Idea
 
-This repository does not include the production crawling implementation.
+The website data did not come from one manually written spreadsheet.
 
-However, the public documentation should still state the real origin of the production data clearly.
+My own approach was:
 
-## Original Production Data Source
+1. use crawler scripts or browser developer tools to collect course-related information and user review data from relevant Everytime pages
+2. group multiple user reviews for the same course
+3. normalize the raw records into a stable course schema
+4. use AI to summarize the grouped reviews into fields that are easier to display and retrieve
+5. write the processed records into the website database
+6. use those processed records for frontend display, search, and the AI assistant
 
-In the original production workflow, course-related source signals were collected from relevant pages in the Korean student community software Everytime.
+## Why AI Summarization Was Used
 
-That includes, at a high level:
+Raw user reviews are noisy and uneven.
 
-- course-related page content
-- historical student review signals
-- category-oriented browsing information used during internal processing
+After collecting multiple reviews for the same course, AI summarization was used to generate clearer course-level fields such as:
 
-The public repository intentionally omits:
+- pros
+- cons
+- advice
+- assignment load
+- team project burden
+- grading style
+- attendance style
+- exam count
 
-- the actual Everytime crawling scripts
-- login/session handling details
-- extraction heuristics
-- production normalization rules
-- production sync procedures
+This made the data more usable in three places at once:
 
-## What Happened After Collection
+- course cards on the frontend
+- keyword and field-based search
+- the later RAG pipeline for the AI assistant
 
-The raw information was not exposed directly to end users in its original form.
+## Important Practical Point
 
-In production, the pipeline continued with additional processing:
+The website is not just showing raw scraped text from Everytime.
 
-1. raw course-related information was normalized into a stable schema
-2. multiple user review signals for the same course were analyzed and summarized with AI
-3. the AI-generated summaries produced cleaner fields such as:
-   - pros
-   - cons
-   - advice
-   - assignment load
-   - team project burden
-   - grading strictness
-   - attendance style
-   - exam count
-4. those summarized fields were then stored in the website data model
-5. the resulting records were used to improve:
-   - frontend readability
-   - course search quality
-   - AI assistant context quality
-   - later RAG retrieval quality
+The data first goes through:
 
-This is the important public explanation: the website did not just mirror raw scraped text. The production workflow turned raw Everytime-derived signals into structured and summarized course records.
+- collection
+- grouping
+- normalization
+- AI summarization
+- storage into the course schema
 
-## How To Describe It Publicly
-
-Accurate wording:
-
-> Production course and review signals were originally collected and organized from relevant pages in the Korean student community software Everytime. After collection, multiple user review signals were AI-analyzed and summarized into structured course fields such as pros, cons, and advice. This public repository does not include the private crawling and data-maintenance pipeline.
-
-This is the right balance:
-
-- it tells people where the production data came from
-- it explains that the website uses AI summarization over multiple review signals
-- it does not pretend the OSS repo ships with the crawler
-- it does not leak private operational details
-
-## What The OSS Repo Still Provides
-
-Even without the private Everytime pipeline, the public repository still provides:
-
-- the website shell
-- the admin review workflow
-- the AI / RAG runtime logic
-- the database schema and vector retrieval definition
-- the contract for how course data should look
-
-## If Someone Wants To Rebuild The Dataset
-
-They need to implement their own pipeline for:
-
-1. collecting course records
-2. collecting or importing review signals
-3. normalizing fields into the public schema
-4. summarizing review signals into usable course-level fields
-5. generating embeddings
-6. writing records into Supabase
-
-That pipeline may or may not use Everytime. The OSS repo does not enforce a specific private ingestion implementation.
+If you want to build on top of this project, you can follow the same general idea.
+You can also use a different data collection method if that works better for you.

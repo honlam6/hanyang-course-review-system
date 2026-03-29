@@ -2,7 +2,7 @@
 
 ## Repository Identity
 
-- Recommended repository name: `hanyang-course-guide-web-oss`
+- Recommended repository name: `hanyang-course-guide`
 - About text: use one of the versions in [`github-metadata.md`](./github-metadata.md)
 - Topics: copy from [`github-metadata.md`](./github-metadata.md)
 - Website: `https://hanyang.eu.cc`
@@ -30,25 +30,24 @@ Before publishing, confirm that the repo contains:
 Confirm none of the following are present:
 
 - production credentials
-- Supabase service role keys
-- private datasets
-- private Everytime scripts
-- Everytime login/session materials
-- internal production automation
+- service-role keys
+- session tokens
+- sensitive user data
+- internal database exports
 
-## Public Positioning Review
+## Wording Review
 
-Confirm the wording stays accurate:
+Confirm the wording stays consistent:
 
 - This is a Hanyang University course review system
-- The architecture can be generalized to other Korean universities
-- The production data source included Everytime-related signals
-- The private crawling and maintenance pipeline is not included in OSS
+- The current data flow uses Everytime-related pages
+- Data is grouped and summarized before being written into the site tables
+- The processed records are used in display, search, and the AI assistant
 
-## Final Pre-Publish Check
+## Final Check
 
 1. Review `git status`
 2. Review `README.md`
 3. Review screenshot quality
-4. Confirm no accidental private files exist
-5. Create the first public commit only after final review
+4. Confirm no accidental sensitive files exist
+5. Commit and publish

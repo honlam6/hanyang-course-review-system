@@ -59,15 +59,15 @@ This table powers:
 
 ### Why `pros`, `cons`, and `advice` Matter
 
-These fields are not just cosmetic display fields.
+These fields are not just for display.
 
-In the original production logic, multiple raw user review signals were summarized into higher-level course guidance fields. Those summary fields then served three purposes at once:
+When multiple reviews of the same course are grouped together and summarized, fields like `pros`, `cons`, and `advice` become useful in three places:
 
-- direct frontend readability
-- better search recall and keyword matching
-- richer RAG context for the AI assistant
+- frontend readability
+- search quality
+- RAG context quality
 
-That is why `advice` is part of the searchable public fields, and why summary-like fields remain important in the runtime data model.
+That is why `advice` is part of the searchable fields and why summary-like fields remain important in the runtime data model.
 
 ## `course_feedback_submissions`
 
@@ -157,7 +157,3 @@ Definition:
   "category_departments": ["计算机学部"]
 }
 ```
-
-## Practical Note
-
-The public repository defines the structure and runtime usage of these records, but does not include the private scripts that originally populated, summarized, and maintained them in production.

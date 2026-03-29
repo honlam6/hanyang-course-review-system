@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an improvement for the public web OSS shell
+about: Suggest an improvement for the web project
 title: "[Feature] "
 labels: enhancement
 assignees: ''
@@ -29,9 +29,9 @@ Please confirm whether this request is about:
 - [ ] Public frontend
 - [ ] Admin dashboard
 - [ ] Public API
-- [ ] AI / RAG runtime behavior
+- [ ] AI assistant or search behavior
 - [ ] Documentation
 
 ## Notes
 
-Requests for the private Everytime crawler or private production data pipeline are out of scope for this OSS repository.
+Add any extra context here.

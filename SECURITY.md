@@ -1,36 +1,34 @@
 # Security Policy
 
-## Supported Scope
+## Scope
 
-This repository is a public web-only OSS shell.
+Please report issues that affect the security of the website or its supporting services, for example:
 
-Security issues that matter here include:
-
-- authentication and authorization flaws
+- authentication or authorization flaws
 - admin access-control problems
-- API validation gaps
-- secret exposure
+- input validation gaps
+- exposed secrets
 - dependency vulnerabilities with real impact
-- unsafe data handling in public code paths
+- unsafe public API behavior
 
 ## Reporting
 
 Please do not open a public issue for sensitive vulnerabilities.
 
-Report privately to the maintainer first.
+Report them to the maintainer through a private channel first.
 
-If you are preparing this repository for public GitHub release, replace this section with your preferred private contact channel, for example:
+If you are publishing this repository under your own account, replace this section with your preferred contact method, such as:
 
 - email
 - GitHub private security advisory
 - another private reporting address
 
-## What Not To Publish
+## Basic Rules
 
 Never publish:
 
 - production credentials
-- Supabase service role keys
-- private datasets
-- Everytime login/session material
-- internal operational details that are intentionally omitted from this OSS repository
+- service-role keys
+- session tokens
+- sensitive user data
+- internal database exports

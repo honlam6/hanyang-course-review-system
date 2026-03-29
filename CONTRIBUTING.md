@@ -2,31 +2,24 @@
 
 ## Scope
 
-This repository is a public web-only OSS shell.
+This repository contains the web version of the Hanyang University course review system.
 
-Good contribution areas:
+Useful contribution areas:
 
-- frontend UI improvements
-- accessibility improvements
-- admin experience improvements
-- documentation fixes
-- translation updates
-- runtime API fixes
-- AI / RAG runtime behavior improvements
+- frontend UI and interaction improvements
+- accessibility fixes
+- admin workflow improvements
+- API fixes
+- documentation and translation updates
+- search and AI assistant behavior improvements
 - test coverage and code quality improvements
-
-Out of scope for this public repo:
-
-- requests for the private production crawler
-- requests for private Everytime extraction scripts
-- requests for internal production credentials or data
 
 ## Workflow
 
 1. Fork the repository.
 2. Create a focused branch.
-3. Keep changes small and reviewable.
-4. Update docs when behavior changes.
+3. Keep changes small and easy to review.
+4. Update docs if behavior changes.
 5. Open a pull request with a clear summary.
 
 ## Change Expectations
@@ -34,7 +27,7 @@ Out of scope for this public repo:
 Please explain:
 
 - what changed
-- why the change is needed
+- why it changed
 - whether UI behavior changed
 - whether API behavior changed
 - whether docs were updated
@@ -50,11 +43,11 @@ If your change affects product behavior, also update one or more of:
 - `docs/data-model.md`
 - `docs/data-source.md`
 
-## Security And Sensitive Data
+## Security And Data Handling
 
 Do not commit:
 
 - secrets
-- private datasets
-- production exports
-- Everytime credentials or session data
+- production credentials
+- raw session material
+- database exports that should not be public
